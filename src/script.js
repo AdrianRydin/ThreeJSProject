@@ -15,19 +15,54 @@ const scene = new THREE.Scene();
 
 // Objects
 
-const Geometry = new THREE.SphereBufferGeometry(0.5, 64, 64);
+const Geometry = new THREE.SphereBufferGeometry(0.5, 256, 256);
 
-// Materials
+// Stars
 
-const material = new THREE.MeshStandardMaterial();
+const starGeometry = new THREE.BufferGeometry();
+
+const getRandomParticelPos = (particleCount) => {
+  const arr = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount; i++) {
+    arr[i] = (Math.random() - 0.5) * 10;
+  }
+  return arr;
+};
+
+starGeometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(getRandomParticelPos(350), 3)
+);
+
+starGeometry.translate(0, 0, -2);
+
+// Material sphere
+
+const material = new THREE.MeshStandardMaterial({
+  color: 0x44aa88,
+});
 material.wireframe = true;
 material.metalness = 0.5;
 material.roughness = 0.9;
 material.color = new THREE.Color(0xff0000);
 
+// Material star
+
+const loader = new THREE.TextureLoader();
+
+const material2 = new THREE.PointsMaterial({
+  color: 0x44aa88,
+  size: 0.15,
+  map: loader.load(
+    "https://raw.githubusercontent.com/Kuntal-Das/textures/main/sp2.png"
+  ),
+  transparent: true,
+});
+
 // Mesh
 const sphere = new THREE.Mesh(Geometry, material);
-scene.add(sphere);
+const cube = new THREE.Points(starGeometry, material2);
+scene.add(sphere, cube);
 
 // Light 1
 
@@ -38,18 +73,18 @@ pointLight.castShadow = true;
 
 scene.add(pointLight);
 
-const light = gui.addFolder("Light 1");
+const lightGUI = gui.addFolder("Light 1");
 
-light.add(pointLight.position, "x").min(-3).max(3).step(0.01);
-light.add(pointLight.position, "y").min(-6).max(6).step(0.01);
-light.add(pointLight.position, "z").min(-3).max(3).step(0.01);
-light.add(pointLight, "intensity").min(0).max(10).step(0.01);
+lightGUI.add(pointLight.position, "x").min(-3).max(3).step(0.01);
+lightGUI.add(pointLight.position, "y").min(-6).max(6).step(0.01);
+lightGUI.add(pointLight.position, "z").min(-3).max(3).step(0.01);
+lightGUI.add(pointLight, "intensity").min(0).max(10).step(0.01);
 
 const lightColor = {
   color: 0xff0000,
 };
 
-light.addColor(lightColor, "color").onChange(() => {
+lightGUI.addColor(lightColor, "color").onChange(() => {
   pointLight.color.set(lightColor.color);
 });
 
@@ -133,6 +168,13 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Animate
  */
 
+let mouseX = 0;
+let mouseY = 0;
+document.addEventListener("mousemove", (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
 const clock = new THREE.Clock();
 
 const tick = () => {
@@ -141,6 +183,8 @@ const tick = () => {
   // Update objects
   sphere.rotation.y = 0.1 * elapsedTime;
   sphere.rotation.x = 0.01 * elapsedTime;
+
+  cube.position.x = 0.02 * elapsedTime;
 
   // Render
 

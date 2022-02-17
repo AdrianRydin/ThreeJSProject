@@ -6,7 +6,6 @@
 html,
 body {
   height: 100vh;
-  font-family: "Poppins";
   background: rgb(24, 24, 24);
 }
 
@@ -15,4 +14,15 @@ body {
   top: 0;
   left: 0;
   outline: none;
+}
+
+.namn {
+  color: white;
+  font-size: 3rem;
+  right: 0;
+  left: 0;
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  top: 15%;
 }
