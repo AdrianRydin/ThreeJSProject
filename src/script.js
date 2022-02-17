@@ -21,19 +21,62 @@ const Geometry = new THREE.SphereBufferGeometry(0.5, 64, 64);
 
 const material = new THREE.MeshStandardMaterial();
 material.wireframe = true;
+material.metalness = 0.5;
+material.roughness = 0.9;
 material.color = new THREE.Color(0xff0000);
 
 // Mesh
 const sphere = new THREE.Mesh(Geometry, material);
 scene.add(sphere);
 
-// Lights
+// Light 1
 
-const pointLight = new THREE.PointLight(0xffffff, 0.1);
-pointLight.position.x = 2;
-pointLight.position.y = 3;
-pointLight.position.z = 4;
+const pointLight = new THREE.PointLight(0xffffff);
+pointLight.position.set(1, 1, 1);
+pointLight.intensity = 0.3;
+pointLight.castShadow = true;
+
 scene.add(pointLight);
+
+const light = gui.addFolder("Light 1");
+
+light.add(pointLight.position, "x").min(-3).max(3).step(0.01);
+light.add(pointLight.position, "y").min(-6).max(6).step(0.01);
+light.add(pointLight.position, "z").min(-3).max(3).step(0.01);
+light.add(pointLight, "intensity").min(0).max(10).step(0.01);
+
+const lightColor = {
+  color: 0xff0000,
+};
+
+light.addColor(lightColor, "color").onChange(() => {
+  pointLight.color.set(lightColor.color);
+});
+
+// Light 2
+
+const pointLight2 = new THREE.PointLight(0xd2);
+
+pointLight2.position.set(-1.08, -1.06, 0);
+pointLight2.intensity = 5.78;
+pointLight2.castShadow = true;
+
+scene.add(pointLight2);
+
+const light2 = gui.addFolder("Light 2");
+
+light2.add(pointLight2.position, "x").min(-3).max(3).step(0.01);
+light2.add(pointLight2.position, "y").min(-6).max(6).step(0.01);
+light2.add(pointLight2.position, "z").min(-3).max(3).step(0.01);
+light2.add(pointLight2, "intensity").min(0).max(10).step(0.01);
+
+const light2Color = {
+  color: 0xd2,
+};
+
+light2.addColor(light2Color, "color").onChange(() => {
+  pointLight2.color.set(light2Color.color);
+});
 
 /**
  * Sizes
@@ -73,8 +116,8 @@ camera.position.z = 2;
 scene.add(camera);
 
 // Controls
-// const controls = new OrbitControls(camera, canvas)
-// controls.enableDamping = true
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = true;
 
 /**
  * Renderer
@@ -97,11 +140,10 @@ const tick = () => {
 
   // Update objects
   sphere.rotation.y = 0.1 * elapsedTime;
-
-  // Update Orbital Controls
-  // controls.update()
+  sphere.rotation.x = 0.01 * elapsedTime;
 
   // Render
+
   renderer.render(scene, camera);
 
   // Call tick again on the next frame
