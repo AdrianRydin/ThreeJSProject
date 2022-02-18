@@ -140,7 +140,7 @@ window.addEventListener("resize", () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(
-  75,
+  100,
   sizes.width / sizes.height,
   0.1,
   100
@@ -148,6 +148,7 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.x = 0;
 camera.position.y = 0;
 camera.position.z = 2;
+
 scene.add(camera);
 
 // Controls
@@ -184,7 +185,7 @@ const tick = () => {
   sphere.rotation.y = 0.1 * elapsedTime;
   sphere.rotation.x = 0.01 * elapsedTime;
 
-  cube.position.x = 0.02 * elapsedTime;
+  cube.rotation.x = 0.02 * elapsedTime;
 
   // Render
 
