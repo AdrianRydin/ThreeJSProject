@@ -24,3 +24,7 @@ Ifall man använder scroll hjulet så zoomar man in och ut och man använder mus
 
 Stjärnorna har ingen fast position där de ritas ut, på rad 28 i '../src/script.js' så används MATH.Random för att skapa en
 slumpmässig position av stjärnorna.
+
+## GibHub
+
+https://github.com/AdrianRydin/ThreeJSProject
